@@ -9,8 +9,6 @@ module.exports = defineConfig({
         target: 'http://gmall-h5-api.atguigu.cn',
         // 这边不需要路径重写,因为'/api'已经被加上了
         // pathRewrite: { '^api': '' },
-        ws: true,
-        changeOrigin: true
       },
     }
   }

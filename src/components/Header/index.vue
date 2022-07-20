@@ -77,13 +77,17 @@ export default {
         params: { keyword: "" || undefined },
         query: { keyword: this.keyword },
       }); */
-      this.$router.push(
-        {
+
+      // 如果有 query 参数也要一起带走
+      if (this.$route.query) {
+        let location = {
           name: "search",
-          params: { keyword: this.keyword.toUpperCase() },
-          query: { keyword: this.keyword },
-        },
-      );
+          params: { keyword: this.keyword || undefined },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
+      }
+      // 千万不要把 this.$router.push(location); 写在if外面,let局部作用域
     },
   },
 };
