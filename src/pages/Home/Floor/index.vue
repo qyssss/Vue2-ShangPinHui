@@ -28,7 +28,7 @@
               <img :src="list.imgUrl" />
             </div>
             <div class="floorBanner">
-              <!-- 轮播图地方 -->
+              <!-- 轮播图地方 这里再把数据传给封装好的轮播图组件 -->
               <Carousel :list="list.carouselList" />
             </div>
             <div class="split">

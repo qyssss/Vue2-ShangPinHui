@@ -19,6 +19,7 @@
 </template>
 
 <script>
+// 引包 样式在入口文件引入
 import Swiper from "swiper";
 export default {
   name: "Carousel",

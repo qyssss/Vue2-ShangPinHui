@@ -43,6 +43,7 @@
             class="sui-btn btn-xlarge btn-danger"
             type="button"
             @click="goSearch"
+            ref="search"
           >
             搜索
           </button>
@@ -79,15 +80,16 @@ export default {
       }); */
 
       // 如果有 query 参数也要一起带走
+
       if (this.$route.query) {
         let location = {
           name: "search",
           params: { keyword: this.keyword || undefined },
         };
         location.query = this.$route.query;
+        // 千万不要把 this.$router.push(location); 写在if外面,let是局部作用域
         this.$router.push(location);
       }
-      // 千万不要把 this.$router.push(location); 写在if外面,let局部作用域
     },
   },
 };

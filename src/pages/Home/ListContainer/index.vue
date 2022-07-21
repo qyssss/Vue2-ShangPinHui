@@ -81,7 +81,6 @@
 
 <script>
 import { mapState } from "vuex";
-// 引包
 export default {
   name: "ListContainer",
   mounted() {

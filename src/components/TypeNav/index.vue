@@ -121,7 +121,7 @@ export default {
       if (categoryname) {
         // 整理路由跳转参数
         let location = { name: "search" };
-        let query = { categoryname: categoryname };
+        let query = { categoryName: categoryname };
         // 2.再加自定义属性data-category1Id...区分一级二级三级分类 把要传的参数动态给query
         if (category1id) {
           query.category1Id = category1id;
@@ -292,20 +292,20 @@ export default {
     .sort-enter-to {
       height: 461px;
     }
-    // 离开的
+    /*  // 离开的
     .sort-leave {
       height: 461px;
     }
     .sort-leave-to {
       height: 0;
-    }
+    } */
     // 定义动画时间 速度
     .sort-enter-active {
       transition: all 0.5s linear;
     }
-    .sort-leave-active {
+    /* .sort-leave-active {
       transition: all 0.5s linear;
-    }
+    } */
   }
 }
 </style>
