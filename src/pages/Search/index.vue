@@ -11,38 +11,60 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 分类的面包屑 -->
             <li class="with-x" v-if="searchParams.categoryName">
               {{ searchParams.categoryName
               }}<i @click="removeCategoryName">×</i>
+            </li>
+            <!-- 关键字的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
+            </li>
+            <!-- 品牌信息展示 -->
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTradeMark">×</i>
+            </li>
+            <!-- 平台售卖属性值展示(这里props是数组) -->
+            <li
+              class="with-x"
+              v-for="(attrValue, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }">
+                  <a
+                    >综合<i
+                      v-show="isOne"
+                      :class="{
+                        'el-icon-top': isAsc,
+                        'el-icon-bottom': isDesc,
+                      }"
+                    ></i
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }">
+                  <a
+                    >价格<i
+                      v-show="isTwo"
+                      :class="{
+                        'el-icon-top': isAsc,
+                        'el-icon-bottom': isDesc,
+                      }"
+                    ></i
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -173,6 +195,18 @@ export default {
   computed: {
     // mapGetters用数组写法,因为getters计算没有划分模块
     ...mapGetters(["goodsList"]),
+    isOne() {
+      return this.searchParams.order.indexOf("1") !== -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") !== -1;
+    },
+    isAsc() {
+      return this.searchParams.order.indexOf("asc") !== -1;
+    },
+    isDesc() {
+      return this.searchParams.order.indexOf("desc") !== -1;
+    },
   },
   methods: {
     // 向服务器发请求获取 Search 模块数据(根据参数不同返回不同数据展示)
@@ -191,9 +225,48 @@ export default {
       this.getData();
       // 地址栏也需要修改 进行路由跳转,自己跳自己
       // 只删除 query 参数,不必删除 params参数(华为)
-      if ((this.$route.params)) {
+      if (this.$route.params) {
         this.$router.push({ name: "search", params: this.$route.params });
       }
+    },
+    // 删除关键字
+    removeKeyword() {
+      // 把面包屑删除
+      this.searchParams.keyword = undefined;
+      // 再次发请求
+      this.getData();
+      // 通知兄弟组件Header清除关键字
+      this.$bus.$emit("clear");
+      // 进行路由跳转
+      this.$router.push({ name: "search", query: this.$route.query });
+    },
+    // 自定义事件回调
+    trademarkInfo(trademark) {
+      // 整理品牌字段参数 "ID:品牌名称"
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+      this.getData();
+    },
+    // 删除品牌信息
+    removeTradeMark() {
+      this.searchParams.trademark = undefined;
+      this.getData();
+    },
+    // 收集平台属性的回调
+    attrInfo(attr, attrValue) {
+      // 整理参数格式 ["属性ID:属性值:属性名"]
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+      // 数组去重
+      if (this.searchParams.props.indexOf(props) === -1) {
+        this.searchParams.props.push(props);
+      }
+      // 再发请求
+      this.getData();
+    },
+    // 删除售卖属性
+    removeAttr(index) {
+      // 整理参数再发请求
+      this.searchParams.props.splice(index, 1);
+      this.getData();
     },
   },
   watch: {

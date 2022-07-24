@@ -14,8 +14,15 @@ Vue.config.productionTip = false
 import '@/mock/mockServe.js'
 // 引入swiper样式(放在这里可以全局使用)
 import 'swiper/css/swiper.css'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI)
 new Vue({
   render: h => h(App),
+  // 配置全局事件总线
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
   // 注册路由 用小写,组件获得 $router,$route
   router,
   // 注册仓库,组件实例身上会多一个 store 属性
