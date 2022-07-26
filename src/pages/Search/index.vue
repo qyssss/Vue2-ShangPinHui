@@ -44,7 +44,7 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{ active: isOne }">
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
                   <a
                     >综合<i
                       v-show="isOne"
@@ -55,7 +55,7 @@
                     ></i
                   ></a>
                 </li>
-                <li :class="{ active: isTwo }">
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
                   <a
                     >价格<i
                       v-show="isTwo"
@@ -116,35 +116,7 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination />
         </div>
       </div>
     </div>
@@ -266,6 +238,26 @@ export default {
     removeAttr(index) {
       // 整理参数再发请求
       this.searchParams.props.splice(index, 1);
+      this.getData();
+    },
+    // 排序操作
+    changeOrder(flag) {
+      // flag 标记用户点击的是综合还是价格
+      // 获取起始状态
+      let originOrder = this.searchParams.order;
+      let originFlag = this.searchParams.order.split(":")[0];
+      let originSort = this.searchParams.order.split(":")[1];
+      let newOrder = "";
+      // 点击的按钮相同就取反
+      if (flag === originFlag) {
+        newOrder = `${originFlag}:${originSort === "desc" ? "asc" : "desc"}`;
+      }
+      // 点击的按钮不同就默认降序
+      else {
+        newOrder = `${flag}:"desc"`;
+      }
+      // 将 newOrder 赋给 searchParams 并且请求
+      this.searchParams.order = newOrder;
       this.getData();
     },
   },
