@@ -4,12 +4,8 @@ import VueRouter from 'vue-router';
 
 // 使用插件
 Vue.use(VueRouter)
-// 引入路由组件
-import Home from '@/pages/Home'
-import Login from '@/pages/Login'
-import Search from '@/pages/Search'
-import Register from '@/pages/Register'
-
+// 引入路由具体配置
+import routes from './routes';
 // 把VueRouter原型对象的push,先保存一份
 let originPush = VueRouter.prototype.push
 let originReplace = VueRouter.prototype.replace
@@ -36,36 +32,10 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 
 // 具体配置
 export default new VueRouter({
-    routes: [
-        {
-            path: '/home',
-            component: Home,
-            meta: { show: true }
-        },
-        {
-            // 用 params 参数要起名字 
-            name: 'search',
-            // 如果已经占位要求params参数,但是没有传,路径有问题
-            // path: '/search/:keyword?',指定 params可传可不传 
-            path: '/search/:keyword?',
-            component: Search,
-            meta: { show: true }
-        },
-        {
-            path: '/login',
-            component: Login,
-            meta: { show: false }
-        },
-        {
-            path: '/register',
-            component: Register,
-            meta: { show: false }
-        },
-        // 重定向,项目跑起来立刻访问首页
-        {
-            path: '*',
-            redirect: '/home'
-        }
-
-    ]
+    routes,
+    // 滚动行为
+    scrollBehavior(to, from, savedPosition) {
+        // 始终滚动到顶部
+        return { y: 0 }
+    },
 })

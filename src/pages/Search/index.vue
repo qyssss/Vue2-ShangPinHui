@@ -79,9 +79,10 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <!-- 路由跳转的时候要带参数 -->
+                    <router-link :to="`/detail/${good.id}`">
+                      <img :src="good.defaultImg" />
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -116,7 +117,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <Pagination />
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -124,7 +131,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
@@ -143,7 +150,7 @@ export default {
         //排序:初始状态应该是综合且降序
         order: "1:desc",
         //第几页
-        pageNo: 1,
+        pageNo: 8,
         //每一页展示条数
         pageSize: 3,
         //平台属性的操作
@@ -179,6 +186,8 @@ export default {
     isDesc() {
       return this.searchParams.order.indexOf("desc") !== -1;
     },
+    // 获取 Search 模块展示的产品多少数据
+    ...mapState({ total: (state) => state.search.searchList.total }),
   },
   methods: {
     // 向服务器发请求获取 Search 模块数据(根据参数不同返回不同数据展示)
@@ -258,6 +267,12 @@ export default {
       }
       // 将 newOrder 赋给 searchParams 并且请求
       this.searchParams.order = newOrder;
+      this.getData();
+    },
+    // 自定义事件 获取当前第几页
+    getPageNo(pageNo) {
+      // 整理参数
+      this.searchParams.pageNo = pageNo;
       this.getData();
     },
   },

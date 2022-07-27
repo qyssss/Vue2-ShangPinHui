@@ -1,27 +1,84 @@
 <template>
   <!-- 分页器 -->
   <div class="pagination">
-    <button>上一页</button>
-    <button>1</button>
-    <button>···</button>
+    <!-- 上 -->
+    <button :disabled="pageNo === 1" @click="$emit('getPageNo', pageNo - 1)">
+      上一页
+    </button>
+    <button
+      v-if="startNumAndEndNum.start > 1"
+      @click="$emit('getPageNo', 1)"
+      :class="{ active: pageNo === 1 }"
+    >
+      1
+    </button>
+    <button v-if="startNumAndEndNum.start > 2">···</button>
 
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
+    <!-- 中间部分 -->
+    <button
+      v-for="(page, index) in startNumAndEndNum.end"
+      :key="index"
+      v-if="page >= startNumAndEndNum.start"
+      @click="$emit('getPageNo', page)"
+      :class="{ active: pageNo === page }"
+    >
+      {{ page }}
+    </button>
 
-    <button>···</button>
-    <button>9</button>
-    <button>下一页</button>
-
-    <button style="margin-left: 30px">共 60 条</button>
+    <!-- 下 -->
+    <button v-if="startNumAndEndNum.end < totalPage - 1">···</button>
+    <button
+      v-if="startNumAndEndNum.end < totalPage"
+      @click="$emit('getPageNo', totalPage)"
+      :class="{ active: pageNo === totalPage }"
+    >
+      {{ totalPage }}
+    </button>
+    <button
+      :disabled="pageNo === totalPage"
+      @click="$emit('getPageNo', pageNo + 1)"
+    >
+      下一页
+    </button>
+    <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
+  props: ["pageNo", "pageSize", "total", "continues"],
+  computed: {
+    // 总共多少页
+    totalPage() {
+      return Math.ceil(this.total / this.pageSize);
+    },
+    // 计算连续页面起始和结束数字
+    startNumAndEndNum() {
+      const { pageNo, continues, totalPage } = this;
+      let start = 0,
+        end = 0;
+      // 总页数小于连续页码
+      if (continues > totalPage) {
+        start = 1;
+        end = totalPage;
+      } else {
+        // 总页数大于连续页码数(正常情况)
+        start = pageNo - Math.floor(continues / 2);
+        end = pageNo + Math.floor(continues / 2);
+        // 不正常情况(start出现0,负数)
+        if (start < 1) {
+          start = 1;
+          end = continues;
+        }
+        if (end > totalPage) {
+          end = totalPage;
+          start = totalPage - continues + 1;
+        }
+      }
+      return { start, end };
+    },
+  },
 };
 </script>
 
