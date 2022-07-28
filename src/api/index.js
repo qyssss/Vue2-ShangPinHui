@@ -28,6 +28,12 @@ export const reqGoodsInfo = (skuId) => requests({
     method: "get",
 })
 
+// 将产品添加到购物车或者更新产品个数 /api/cart/addToCart/{ skuId }/{ skuNum } POST
+export const reqAddOrUpdateShopCart = (skuId,skuNum) => requests({
+    url:`/cart/addToCart/${ skuId }/${ skuNum }`,
+    method: "post",
+})
+
 
 
 

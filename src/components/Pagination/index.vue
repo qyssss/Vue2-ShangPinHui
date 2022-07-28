@@ -53,7 +53,7 @@ export default {
     totalPage() {
       return Math.ceil(this.total / this.pageSize);
     },
-    // 计算连续页面起始和结束数字
+    // 计算连续页面起始和结束数字!!!
     startNumAndEndNum() {
       const { pageNo, continues, totalPage } = this;
       let start = 0,
