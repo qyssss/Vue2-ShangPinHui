@@ -29,12 +29,25 @@ export const reqGoodsInfo = (skuId) => requests({
 })
 
 // 将产品添加到购物车或者更新产品个数 /api/cart/addToCart/{ skuId }/{ skuNum } POST
-export const reqAddOrUpdateShopCart = (skuId,skuNum) => requests({
-    url:`/cart/addToCart/${ skuId }/${ skuNum }`,
+export const reqAddOrUpdateShopCart = (skuId, skuNum) => requests({
+    url: `/cart/addToCart/${skuId}/${skuNum}`,
     method: "post",
 })
-
-
+// 获取购物车列表数据接口 /api/cart/cartList GET
+export const reqCartList = () => requests({
+    url: '/cart/cartList',
+    method: 'get'
+})
+// 删除购物车产品接口 /api/cart/deleteCart/{skuId} DELETE
+export const reqDeleteCart = (skuId) => requests({
+    url: `/cart/deleteCart/${skuId}`,
+    method: "delete"
+})
+// 修改产品选中状态接口 /api/cart/checkCart/{skuId}/{isChecked} GET
+export const reqUpdateCheckedById = (skuId, isChecked) => requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: 'get'
+})
 
 
 

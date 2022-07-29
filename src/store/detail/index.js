@@ -1,6 +1,10 @@
 import { reqAddOrUpdateShopCart, reqGoodsInfo } from '@/api'
+// 封装临时游客身份的模块-->uuid(不能变化)
+import { getUUID } from '@/utils/uuid_token'
 const state = {
-    goodInfo: {}
+    goodInfo: {},
+    // 游客的临时身份
+    uuid_token: getUUID()
 }
 const mutations = {
     GETGOODINFO(state, goodInfo) {
@@ -15,7 +19,7 @@ const actions = {
             commit("GETGOODINFO", result.data)
         }
     },
-    // 将产品添加到购物车
+    // 将产品添加到购物车 async返回的一定是Promise(成功或者失败)
     async addOrUpdateShopCart({ commit }, { skuId, skuNum }) {
         // 加入购物车后(发请求),把参数给了服务器,没有返回数据
         // 因此不需要三连环

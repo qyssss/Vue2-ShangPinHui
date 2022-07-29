@@ -402,7 +402,14 @@ export default {
         skuId:this.$route.params.skuId,
         skuNum:this.skuNum,
       })
-      // 2.如果成功就路由跳转(并且传参),失败就给用户提示 
+      sessionStorage.setItem('skuInfo',JSON.stringify(this.skuInfo))
+      // 2.如果成功就路由跳转(并且传参),失败就给用户提示
+      this.$router.push({
+        name:'addcartsuccess',
+        // 3.在路由跳转时把产品信息带给下一级路由组件
+        // query传对象(skuInfo)路径不好看,使用会话存储,简单参数通过query传
+        query:{ skuNum:this.skuNum },
+      })
       } catch (error) {
         alert(error.message)
       }
