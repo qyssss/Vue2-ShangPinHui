@@ -49,6 +49,27 @@ export const reqUpdateCheckedById = (skuId, isChecked) => requests({
     method: 'get'
 })
 
+// 获取验证码接口 /api/user/passport/sendCode/{phone}
+export const reqGetCode = (phone) => requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: 'get'
+})
+
+// 注册接口 /api/user/passport/register post phone,code,password
+export const reqUserRegister = (data) => requests({
+    url: '/user/passport/register',
+    method: 'post',
+    data,
+})
+
+// 登录接口 /api/user/passport/login post phone,password
+export const reqUserLogin = (data) => requests({
+    url: '/user/passport/login',
+    method: 'post',
+    data,
+})
+
+
 
 
 
