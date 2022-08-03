@@ -1,7 +1,8 @@
 // 配置路由
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
+// 引入store
+import store from '@/store'
 // 使用插件
 Vue.use(VueRouter)
 // 引入路由具体配置
@@ -31,7 +32,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 }
 
 // 具体配置
-export default new VueRouter({
+let router = new VueRouter({
     routes,
     // 滚动行为
     scrollBehavior(to, from, savedPosition) {
@@ -39,3 +40,36 @@ export default new VueRouter({
         return { y: 0 }
     },
 })
+// 全局守卫(前置)
+router.beforeEach(async (to, from, next) => {
+    // 有 token 代表已经登录
+    let token = store.state.user.token
+    // 用户信息 如果用store.state.user.userInfo空对象会为真
+    let name = store.state.user.userInfo.name
+    if (token) {
+        // 如果已经登录还想去登录就停着首页
+        if (to.path == '/login') {
+            next('/')
+        } else {
+            // 登录了 要保证有用户信息再放行
+            if (name) {
+                next()
+            } else {
+                // 没有用户信息 -> 向仓库发请求获取用户信息在首页展示
+                try {
+                    await store.dispatch("getUserInfo");
+                    next()
+                } catch (error) {
+                    // token 失效了获取不了用户信息,要重新登录
+                    // 清除 token
+                    await store.dispatch("userLogout")
+                    next('/login')
+                }
+            }
+        }
+    } else {
+        // 未登录
+        next()
+    }
+})
+export default router

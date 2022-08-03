@@ -21,7 +21,6 @@ export default {
     // 通知vuex发请求,获取三级列表的数据,存储在仓库
     //  因为App挂载只运行一次,避免重复发请求,所以请求放在这里
     this.$store.dispatch("categoryList");
-    
   },
 };
 </script>

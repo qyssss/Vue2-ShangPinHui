@@ -69,6 +69,31 @@ export const reqUserLogin = (data) => requests({
     data,
 })
 
+// 登录后用token获取用户信息 /api/user/passport/auth/getUserInfo get
+export const reqUserInfo = () => requests({
+    url: '/user/passport/auth/getUserInfo',
+    method: 'get'
+})
+
+// 退出登录 /api/user/passport/logout
+export const reqLogout = () => requests({
+    url: '/user/passport/logout',
+    method: 'get'
+})
+
+//获取用户地址信息 /api/user/userAddress/auth/findUserAddressList  get
+export const reqAddressInfo = () => requests({
+    url: '/user/userAddress/auth/findUserAddressList',
+    method: 'get'
+})
+
+// 获取商品清单 /api/order/auth/trade get
+export const reqOrderInfo = () => requests({
+    url: '/order/auth/trade',
+    method: 'get'
+})
+
+
 
 
 
