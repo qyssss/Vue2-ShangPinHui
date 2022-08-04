@@ -7,6 +7,12 @@ import Detail from '@/pages/Detail'
 import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
+import Pay from '@/pages/Pay'
+import PaySuccess from '@/pages/PaySuccess'
+import Center from '@/pages/Center'
+// 引二级路由组建
+import MyOrder from "@/pages/Center/MyOrder";
+import GroupOrder from "@/pages/Center/GroupOrder";
 // 路由配置信息
 export default [
     {
@@ -53,6 +59,37 @@ export default [
         path: '/trade',
         component: Trade,
         meta: { show: true }
+    },
+    {
+        path: '/pay',
+        component: Pay,
+        meta: { show: true }
+    },
+    {
+        path: '/paysuccess',
+        component: PaySuccess,
+        meta: { show: true }
+    },
+    {
+        path: '/center',
+        component: Center,
+        meta: { show: true },
+        // 二级路由组件
+        children: [
+            {
+                path: 'myorder',
+                component: MyOrder
+            },
+            {
+                path: 'grouporder',
+                component: GroupOrder
+            },
+            {
+                // 开始应该显示点东西,路由重定向
+                path: '/center',
+                redirect: '/center/myorder',
+            }
+        ]
     },
     // 重定向,项目跑起来立刻访问首页
     {
