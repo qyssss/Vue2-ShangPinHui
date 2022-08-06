@@ -13,11 +13,13 @@ import Center from '@/pages/Center'
 // 引二级路由组建
 import MyOrder from "@/pages/Center/MyOrder";
 import GroupOrder from "@/pages/Center/GroupOrder";
+
 // 路由配置信息
 export default [
     {
         path: '/home',
-        component: Home,
+        // 路由懒加载 !!!!!!!!!!!!!!!!!
+        component: () => import("@/pages/Home"),
         meta: { show: true }
     },
     {
@@ -58,12 +60,28 @@ export default [
     {
         path: '/trade',
         component: Trade,
-        meta: { show: true }
+        meta: { show: true },
+        beforeEnter: (to, from, next) => {
+            if (from.path == '/shopcart') {
+                next()
+            } else {
+                // 停在当前页
+                next(false)
+            }
+        }
     },
     {
         path: '/pay',
         component: Pay,
-        meta: { show: true }
+        meta: { show: true },
+        beforeEnter: (to, from, next) => {
+            if (from.path == '/trade') {
+                next()
+            } else {
+                // 停在当前页
+                next(false)
+            }
+        }
     },
     {
         path: '/paysuccess',

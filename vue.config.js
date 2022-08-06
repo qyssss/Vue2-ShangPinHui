@@ -1,5 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
+  productionSourceMap: false,
   transpileDependencies: true,
   lintOnSave: false,  // 2.关闭语法检查
   // 代理跨域

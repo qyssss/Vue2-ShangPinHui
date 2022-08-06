@@ -47,13 +47,15 @@
 <script>
 export default {
   name: "Pagination",
+  // 需要当前页数(pageNo)、展示多少条数据(pageSize)、
+  // 一共展示多少数据(total)、分页器连续的页面个数(continues)
   props: ["pageNo", "pageSize", "total", "continues"],
   computed: {
     // 总共多少页
     totalPage() {
       return Math.ceil(this.total / this.pageSize);
     },
-    // 计算连续页面起始和结束数字!!!
+    // 重点计算连续页面起始和结束数字!!!
     startNumAndEndNum() {
       const { pageNo, continues, totalPage } = this;
       let start = 0,

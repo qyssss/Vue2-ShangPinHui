@@ -30,6 +30,23 @@ import 'swiper/css/swiper.css'
 // 统一接收 api 文件夹里面的全部请求函数 
 // 统一引入 这个对象包含所有 api
 import * as API from '@/api'
+
+// 引入图片懒加载 
+import VueLazyload from 'vue-lazyload'
+import ameng from '@/assets/timg.jpg'
+// 注册插件
+Vue.use(VueLazyload, {
+  // 懒加载默认图片
+  loading: ameng,
+})
+
+// 引入自定义插件
+import myPlugins from '@/plugins/myPlugins';
+Vue.use(myPlugins, { name: 'sqy' })
+
+// 引入表单校验插件
+import '@/plugins/validate'
+
 new Vue({
   render: h => h(App),
   // 配置全局事件总线

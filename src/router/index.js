@@ -68,8 +68,16 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     } else {
-        // 未登录
-        next()
+        // 未登录:不能去交易相关和个人中心 
+        let toPath = to.path
+        if (toPath.indexOf("/trade") !== -1 || toPath.indexOf("/pay") !== -1 || toPath.indexOf("/center") !== -1) {
+            // 把未登录时想去而没去的信息存在 query 
+            next('/login?redirect=' + toPath)
+        }
+        // 其他的放行
+        else {
+            next()
+        }
     }
 })
 export default router

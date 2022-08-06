@@ -112,6 +112,13 @@ export const reqPayStatus = (orderId) => requests({
     method: 'get'
 })
 
+// 我的订单列表 /api/order/auth/{page}/{limit} get
+export const reqMyOrderList = (page, limit) => requests({
+    url: `/order/auth/${page}/${limit}`,
+    method: 'get'
+})
+
+
 
 
 
